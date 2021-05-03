@@ -2,12 +2,16 @@
 
 #include <LiquidCrystal_I2C.h>
 #define sensorPin A0 // analog pin of the soil sensor is initialised to A0
+#define trigPin 6
+#define echoPin 7
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 int moistureLevel; // the analog resistor output representing the moisture level
 int moisturePercent;
 void setup()
 {
     pinMode(sensorPin, INPUT); // A0 of arduino is initialised as output
+    pinMode(trigPin, OUTPUT);
+    pinMode(echoPin, INPUT);
     Serial.begin(9600);
     welcomeLCD();
 }
@@ -106,4 +110,18 @@ void wateringStatus(int moisturePercent){
     }
     delay(3000);
 
+}
+// calculate the reservoir water height to find the reservoir water percentage
+float reservoirLevel(){
+    long bounceTime;
+    float distanceCM;
+    float distanceInch;
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(20);
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(20);
+    digitalWrite(trigPin, LOW);
+    bounceTime = pulseIn(echoPin, HIGH);
+    distanceCM = bounceTime / 58.2;
+    return distanceCM;
 }
