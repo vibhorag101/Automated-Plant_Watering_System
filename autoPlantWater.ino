@@ -7,6 +7,8 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 int moistureLevel; // the analog resistor output representing the moisture level
 int moisturePercent;
+int reservoirWaterLevel;
+int reservoirWaterPercent;
 void setup()
 {
     pinMode(sensorPin, INPUT); // A0 of arduino is initialised as output
@@ -21,8 +23,17 @@ void loop()
     moisturePercent = moisturePercentFinder(moistureLevel);
     humidityLCD(moisturePercent);
     wateringStatus(moisturePercent);
+    reservoirWaterLevel = reservoirLevel();
+    
+    /* NOTE temporary code to find the hieght of the reservoir.
+    lcd.clear();
+    lcd.print(reservoirWaterLevel);
+    delay(3000);
+    */
 
-    delay(1000);
+    reservoirWaterPercent=reservoirLevelPercent(reservoirWaterLevel);
+    reservoirPercentLCD(reservoirWaterPercent);
+
 }
 
 // NOTE below we implement the individual function required for the program
@@ -61,9 +72,9 @@ void welcomeLCD()
     lcd.print("PLANT WATERING !");
     delay(3000);
     lcd.clear();
-    lcd.setCursor(4,0);
+    lcd.setCursor(4, 0);
     lcd.print("MADE BY");
-    lcd.setCursor(1,1);
+    lcd.setCursor(1, 1);
     lcd.print("VIBHOR AGARWAL");
 
     delay(4000);
@@ -85,34 +96,37 @@ if moisturePercent<40 - soil is too dry, turning the pump on
 if 40 < moisturePercent < 80 then soil humidity OK no need to water.
 */
 
-void wateringStatus(int moisturePercent){
-    if(moisturePercent <= 30){
+void wateringStatus(int moisturePercent)
+{
+    if (moisturePercent <= 30)
+    {
         lcd.clear();
-        lcd.setCursor(2,0);
+        lcd.setCursor(2, 0);
         lcd.print("SOIL TOO DRY");
-        lcd.setCursor(0,1);
+        lcd.setCursor(0, 1);
         lcd.print("PUMP SWITCHED ON");
     }
-    else if (moisturePercent>30 & moisturePercent<80){
+    else if (moisturePercent > 30 & moisturePercent < 80)
+    {
         lcd.clear();
-        lcd.setCursor(4,0);
+        lcd.setCursor(4, 0);
         lcd.print("SOIL GOOD");
-        lcd.setCursor(1,1);
+        lcd.setCursor(1, 1);
         lcd.print("PUMP NO CHANGE");
-
     }
-    else{
+    else
+    {
         lcd.clear();
-        lcd.setCursor(0,0);
+        lcd.setCursor(0, 0);
         lcd.print("SOIL TOO WET");
-        lcd.setCursor(0,1);
+        lcd.setCursor(0, 1);
         lcd.print("PUMP SWITCHED OF");
     }
     delay(3000);
-
 }
 // calculate the reservoir water height to find the reservoir water percentage
-float reservoirLevel(){
+float reservoirLevel()
+{
     long bounceTime;
     float distanceCM;
     float distanceInch;
@@ -124,4 +138,20 @@ float reservoirLevel(){
     bounceTime = pulseIn(echoPin, HIGH);
     distanceCM = bounceTime / 58.2;
     return distanceCM;
+}
+
+int reservoirLevelPercent(int reservoirLevel)
+{
+    int reservoirPercent = map(reservoirLevel, 15, 45, 100, 0);
+    return reservoirPercent;
+}
+
+void reservoirPercentLCD(int reservoirLevelPercent){
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("RESERVOIR WATER");
+    lcd.setCursor(2,1);
+    lcd.print("IS ");
+    lcd.print(reservoirLevelPercent);
+    lcd.print(" %");   
 }
