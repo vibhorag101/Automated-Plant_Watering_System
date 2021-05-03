@@ -16,6 +16,7 @@ void loop()
     moistureLevel = moistureLevelFinder(sensorPin);
     moisturePercent = moisturePercentFinder(moistureLevel);
     humidityLCD(moisturePercent);
+    wateringStatus(moisturePercent);
 
     delay(1000);
 }
@@ -58,7 +59,7 @@ void welcomeLCD()
     lcd.clear();
     lcd.setCursor(4,0);
     lcd.print("MADE BY");
-    lcd.setCursor(2,1);
+    lcd.setCursor(1,1);
     lcd.print("VIBHOR AGARWAL");
 
     delay(4000);
@@ -68,8 +69,41 @@ void humidityLCD(int moisturePercent)
     lcd.clear();
     lcd.setCursor(2, 0);
     lcd.print("SOIL HUMIDITY");
-    lcd.setCursor(4, 1);
+    lcd.setCursor(5, 1);
     lcd.print("IS ");
     lcd.print(moisturePercent);
     lcd.print("%");
+    delay(3000);
+}
+
+/* NOTE if moisturePercent > 80 - soil is too wet and no need to water
+if moisturePercent<40 - soil is too dry, turning the pump on
+if 40 < moisturePercent < 80 then soil humidity OK no need to water.
+*/
+
+void wateringStatus(int moisturePercent){
+    if(moisturePercent <= 30){
+        lcd.clear();
+        lcd.setCursor(2,0);
+        lcd.print("SOIL TOO DRY");
+        lcd.setCursor(0,1);
+        lcd.print("PUMP SWITCHED ON");
+    }
+    else if (moisturePercent>30 & moisturePercent<80){
+        lcd.clear();
+        lcd.setCursor(4,0);
+        lcd.print("SOIL GOOD");
+        lcd.setCursor(1,1);
+        lcd.print("PUMP NO CHANGE");
+
+    }
+    else{
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("SOIL TOO WET");
+        lcd.setCursor(0,1);
+        lcd.print("PUMP SWITCHED OF");
+    }
+    delay(3000);
+
 }
