@@ -1,4 +1,5 @@
 // we have calibrated the sensor taking analogRead 300 as wettest soil and 1000 as dryest soil
+
 #include <LiquidCrystal_I2C.h>
 #define sensorPin A0 // analog pin of the soil sensor is initialised to A0
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -53,6 +54,14 @@ void welcomeLCD()
     lcd.print("WELCOME TO AUTO ");
     lcd.setCursor(0, 1);
     lcd.print("PLANT WATERING !");
+    delay(3000);
+    lcd.clear();
+    lcd.setCursor(4,0);
+    lcd.print("MADE BY");
+    lcd.setCursor(2,1);
+    lcd.print("VIBHOR AGARWAL");
+
+    delay(4000);
 }
 void humidityLCD(int moisturePercent)
 {
