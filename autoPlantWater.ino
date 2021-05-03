@@ -144,7 +144,19 @@ float reservoirLevel()
 
 int reservoirLevelPercent(int reservoirLevel)
 {
-    int reservoirPercent = map(reservoirLevel, 15, 45, 100, 0);
+    int reservoirPercent;
+    if (reservoirLevel < 15)
+    {
+        reservoirPercent = 0;
+    }
+    else if (reservoirLevel > 45)
+    {
+        reservoirPercent = 100;
+    }
+    else
+    {
+        reservoirPercent = (reservoirLevel-15)*3.3
+    }
     return reservoirPercent;
 }
 
