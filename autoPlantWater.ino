@@ -33,6 +33,8 @@ void loop()
 
     reservoirWaterPercent=reservoirLevelPercent(reservoirWaterLevel);
     reservoirPercentLCD(reservoirWaterPercent);
+    reservoirStatus(reservoirWaterPercent);
+    
 
 }
 
@@ -154,4 +156,30 @@ void reservoirPercentLCD(int reservoirLevelPercent){
     lcd.print("IS ");
     lcd.print(reservoirLevelPercent);
     lcd.print(" %");   
+}
+
+// TODO implement a solution for auto reservoir filling. Currently Manual
+void reservoirStatus(int reservoirLevelPercent){
+    if (reservoirLevelPercent<=30){
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("BUCKET WATER LOW");
+        lcd.setCursor(2,1);
+        lcd.print("KINDLY REFILL");
+    }
+    else if (reservoirLevelPercent>30 & reservoirLevelPercent<80){
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("BUCKET WATER OK");
+        lcd.setCursor(2,1);
+        lcd.print("REFIL NO CHANGE");
+
+    }
+    else{
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("BUCKET FULL");
+        lcd.setCursor(2,1);
+        lcd.print("STOP REFILL");
+    }
 }
