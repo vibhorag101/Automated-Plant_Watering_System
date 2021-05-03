@@ -155,7 +155,7 @@ int reservoirLevelPercent(int reservoirLevel)
     }
     else
     {
-        reservoirPercent = (reservoirLevel-15)*3.3
+        reservoirPercent = (reservoirLevel-15)*3.3;
     }
     return reservoirPercent;
 }
