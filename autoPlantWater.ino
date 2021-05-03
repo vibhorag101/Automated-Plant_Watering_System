@@ -1,3 +1,4 @@
+// we have calibrated the sensor taking analogRead 300 as wettest soil and 1000 as dryest soil
 # define sensorPin A0 // analog pin of the soil sensor is initialised to A0
 int moistureLevel; // the analog resistor output representing the moisture level
 int moisturePercent;
@@ -22,6 +23,6 @@ int moistureLevelFinder(int analogPin){ // input pin having analog input
  taking 1000 as the upper mark for the dryness.
  */
 int moisturePercentFinder(int moistureLevel){
-    int moisturePercent= (1000-moistureLevel)*(0.14);
+    int moisturePercent= (1000-moistureLevel)*(0.14); //  0.14 come by dividing 100 by (1000-300)
     return moisturePercent;
 }
