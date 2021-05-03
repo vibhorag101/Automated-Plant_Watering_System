@@ -24,18 +24,18 @@ void loop()
     humidityLCD(moisturePercent);
     wateringStatus(moisturePercent);
     reservoirWaterLevel = reservoirLevel();
-    
+
     /* NOTE temporary code to find the hieght of the reservoir.
     lcd.clear();
     lcd.print(reservoirWaterLevel);
     delay(3000);
     */
 
-    reservoirWaterPercent=reservoirLevelPercent(reservoirWaterLevel);
+    reservoirWaterPercent = reservoirLevelPercent(reservoirWaterLevel);
     reservoirPercentLCD(reservoirWaterPercent);
-    reservoirStatus(reservoirWaterPercent);
-    
+    reservoirStatusLCD(reservoirWaterPercent);
 
+    delay(2000);
 }
 
 // NOTE below we implement the individual function required for the program
@@ -148,38 +148,44 @@ int reservoirLevelPercent(int reservoirLevel)
     return reservoirPercent;
 }
 
-void reservoirPercentLCD(int reservoirLevelPercent){
+void reservoirPercentLCD(int reservoirLevelPercent)
+{
     lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("RESERVOIR WATER");
-    lcd.setCursor(2,1);
-    lcd.print("IS ");
+    lcd.setCursor(2, 0);
+    lcd.print("BUCKET WATER");
+    lcd.setCursor(0, 1);
+    lcd.print("LEVEL IS ");
     lcd.print(reservoirLevelPercent);
-    lcd.print(" %");   
+    lcd.print(" %");
+    delay(3000);
 }
 
 // TODO implement a solution for auto reservoir filling. Currently Manual
-void reservoirStatus(int reservoirLevelPercent){
-    if (reservoirLevelPercent<=30){
+void reservoirStatusLCD(int reservoirLevelPercent)
+{
+    if (reservoirLevelPercent <= 30)
+    {
         lcd.clear();
-        lcd.setCursor(0,0);
+        lcd.setCursor(0, 0);
         lcd.print("BUCKET WATER LOW");
-        lcd.setCursor(2,1);
+        lcd.setCursor(2, 1);
         lcd.print("KINDLY REFILL");
     }
-    else if (reservoirLevelPercent>30 & reservoirLevelPercent<80){
+    else if (reservoirLevelPercent > 30 & reservoirLevelPercent < 80)
+    {
         lcd.clear();
-        lcd.setCursor(0,0);
+        lcd.setCursor(0, 0);
         lcd.print("BUCKET WATER OK");
-        lcd.setCursor(2,1);
+        lcd.setCursor(2, 1);
         lcd.print("REFIL NO CHANGE");
-
     }
-    else{
+    else
+    {
         lcd.clear();
-        lcd.setCursor(0,0);
+        lcd.setCursor(2, 0);
         lcd.print("BUCKET FULL");
-        lcd.setCursor(2,1);
+        lcd.setCursor(2, 1);
         lcd.print("STOP REFILL");
     }
+    delay(3000);
 }
