@@ -9,17 +9,18 @@ void setup()
     pinMode(sensorPin, INPUT); // A0 of arduino is initialised as output
     Serial.begin(9600);
     welcomeLCD();
-    
 }
 void loop()
 {
     moistureLevel = moistureLevelFinder(sensorPin);
     moisturePercent = moisturePercentFinder(moistureLevel);
-    Serial.println(moistureLevel);
-    Serial.println(moisturePercent);
+    humidityLCD(moisturePercent);
 
     delay(1000);
 }
+
+// NOTE below we implement the individual function required for the program
+
 //function for calculating the humidity level of the soil
 int moistureLevelFinder(int analogPin)
 { // input pin having analog input
@@ -35,13 +36,23 @@ int moisturePercentFinder(int moistureLevel)
     return moisturePercent;
 }
 
-void welcomeLCD(){
+void welcomeLCD()
+{
     lcd.init();
     lcd.clear();
     lcd.backlight();
-    lcd.setCursor(0,0);
+    lcd.setCursor(0, 0);
     lcd.print("WELCOME TO AUTO ");
-    lcd.setCursor(0,1);
-    lcd.print("PLANT WATERING");
-
+    lcd.setCursor(0, 1);
+    lcd.print("PLANT WATERING !");
+}
+void humidityLCD(int moisturePercent)
+{
+    lcd.clear();
+    lcd.setCursor(2, 0);
+    lcd.print("SOIL HUMIDITY");
+    lcd.setCursor(4, 1);
+    lcd.print("IS ");
+    lcd.print(moisturePercent);
+    lcd.print("%");
 }
