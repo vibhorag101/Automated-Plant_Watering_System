@@ -13,8 +13,7 @@ void setup()
 void loop()
 {
     moistureLevel = moistureLevelFinder(sensorPin);
-    //for moisture percent we took 300 as wetlevel and 1000 as drylevel
-    moisturePercent = moisturePercentFinder(moistureLevel,300,1000);
+    moisturePercent = moisturePercentFinder(moistureLevel);
     humidityLCD(moisturePercent);
 
     delay(1000);
@@ -28,11 +27,12 @@ int moistureLevelFinder(int analogPin)
     moistureLevel = analogRead(analogPin);
     return moistureLevel;
 }
-/* function for calculating the humidity percentage by taking the lower mark for wetness and the upper mark for the dryness.
+/* function for calculating the humidity percentage by taking 300 as the lower mark for wetness and
+ taking 1000 as the upper mark for the dryness.
  */
-int moisturePercentFinder(int moistureLevel,int wetLevel, int dryLevel)
+int moisturePercentFinder(int moistureLevel)
 {
-    int moisturePercent = ((1000 - moistureLevel) * (100))/(dryLevel-wetLevel); //  0.14 come by dividing 100 by (1000-300)
+    int moisturePercent = (1000 - moistureLevel) * (0.14); //  0.14 come by dividing 100 by (1000-300)
     if (moisturePercent > 100)
     {
         moisturePercent = 100;
