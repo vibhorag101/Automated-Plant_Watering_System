@@ -25,8 +25,8 @@ void loop()
     moistureLevel = moistureLevelFinder(sensorPin);
     moisturePercent = moisturePercentFinder(moistureLevel);
     humidityLCD(moisturePercent);
-    wateringStatus(moisturePercent);
     pumpWaterControl(moisturePercent);
+    wateringStatus(moisturePercent);
     reservoirWaterLevel = reservoirLevel();
     /* NOTE temporary code to find the hieght of the reservoir.
     lcd.clear();
@@ -206,12 +206,14 @@ void reservoirStatusLCD(int reservoirLevelPercent)
     delay(3000);
 }
 
+/* NOTE below function turns on the pump when the moisture percent falls below 30%
+and it turns off the pump once the moisture level reaches 80%. */
+
 void pumpWaterControl(int moisturePercent)
 {
     if (moisturePercent <= 30)
     {
         digitalWrite(relayPin, HIGH);
-        
     }
     else if (moisturePercent >= 80)
     {
