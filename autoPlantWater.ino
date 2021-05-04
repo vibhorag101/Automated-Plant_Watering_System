@@ -141,21 +141,22 @@ float reservoirLevel()
     distanceCM = bounceTime / 58.2;
     return distanceCM;
 }
-
+// taking 15 CM as level when bucket full and 45 cm when bucket empty
+// FIXME there might be some bugs here. 
 int reservoirLevelPercent(int reservoirLevel)
 {
     int reservoirPercent;
-    if (reservoirLevel < 15)
-    {
-        reservoirPercent = 0;
-    }
-    else if (reservoirLevel > 45)
+    if (reservoirLevel <= 15)
     {
         reservoirPercent = 100;
     }
+    else if (reservoirLevel >= 45)
+    {
+        reservoirPercent = 0;
+    }
     else
     {
-        reservoirPercent = (reservoirLevel-15)*3.3;
+        reservoirPercent = (45-reservoirLevel)*3.3;
     }
     return reservoirPercent;
 }
@@ -165,7 +166,7 @@ void reservoirPercentLCD(int reservoirLevelPercent)
     lcd.clear();
     lcd.setCursor(2, 0);
     lcd.print("BUCKET WATER");
-    lcd.setCursor(0, 1);
+    lcd.setCursor(2, 1);
     lcd.print("LEVEL IS ");
     lcd.print(reservoirLevelPercent);
     lcd.print(" %");
@@ -186,10 +187,10 @@ void reservoirStatusLCD(int reservoirLevelPercent)
     else if (reservoirLevelPercent > 30 & reservoirLevelPercent < 80)
     {
         lcd.clear();
-        lcd.setCursor(0, 0);
+        lcd.setCursor(1, 0);
         lcd.print("BUCKET WATER OK");
-        lcd.setCursor(2, 1);
-        lcd.print("REFIL NO CHANGE");
+        lcd.setCursor(0, 1);
+        lcd.print("REFILL NO CHANGE");
     }
     else
     {
