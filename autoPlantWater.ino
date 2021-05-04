@@ -4,6 +4,7 @@
 #define sensorPin A0 // analog pin of the soil sensor is initialised to A0
 #define trigPin 6
 #define echoPin 7
+#define relayPin 10
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 int moistureLevel; // the analog resistor output representing the moisture level
 int moisturePercent;
@@ -14,6 +15,8 @@ void setup()
     pinMode(sensorPin, INPUT); // A0 of arduino is initialised as output
     pinMode(trigPin, OUTPUT);
     pinMode(echoPin, INPUT);
+    pinMode(relayPin, OUTPUT);
+    digitalWrite(relayPin, LOW);
     Serial.begin(9600);
     welcomeLCD();
 }
@@ -23,8 +26,8 @@ void loop()
     moisturePercent = moisturePercentFinder(moistureLevel);
     humidityLCD(moisturePercent);
     wateringStatus(moisturePercent);
+    pumpWaterControl(moisturePercent);
     reservoirWaterLevel = reservoirLevel();
-
     /* NOTE temporary code to find the hieght of the reservoir.
     lcd.clear();
     lcd.print(reservoirWaterLevel);
@@ -141,8 +144,8 @@ float reservoirLevel()
     distanceCM = bounceTime / 58.2;
     return distanceCM;
 }
-// taking 15 CM as level when bucket full and 45 cm when bucket empty
-// FIXME there might be some bugs here. 
+// NOTE  taking 15 CM as level when bucket full and 45 cm when bucket empty
+// FIXME there might be some bugs here.
 int reservoirLevelPercent(int reservoirLevel)
 {
     int reservoirPercent;
@@ -156,7 +159,7 @@ int reservoirLevelPercent(int reservoirLevel)
     }
     else
     {
-        reservoirPercent = (45-reservoirLevel)*3.3;
+        reservoirPercent = (45 - reservoirLevel) * 3.3;
     }
     return reservoirPercent;
 }
@@ -201,4 +204,17 @@ void reservoirStatusLCD(int reservoirLevelPercent)
         lcd.print("STOP REFILL");
     }
     delay(3000);
+}
+
+void pumpWaterControl(int moisturePercent)
+{
+    if (moisturePercent <= 30)
+    {
+        digitalWrite(relayPin, HIGH);
+        
+    }
+    else if (moisturePercent >= 80)
+    {
+        digitalWrite(relayPin, LOW);
+    }
 }
