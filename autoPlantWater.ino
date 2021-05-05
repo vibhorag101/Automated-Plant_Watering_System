@@ -5,6 +5,7 @@
 #define trigPin 6
 #define echoPin 7
 #define relayPin 10
+#define buzzerPin 11
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 int moistureLevel; // the analog resistor output representing the moisture level
 int moisturePercent;
@@ -16,6 +17,7 @@ void setup()
     pinMode(trigPin, OUTPUT);
     pinMode(echoPin, INPUT);
     pinMode(relayPin, OUTPUT);
+    pinMode(buzzerPin, OUTPUT);
     digitalWrite(relayPin, LOW);
     Serial.begin(9600);
     welcomeLCD();
@@ -37,6 +39,7 @@ void loop()
     reservoirWaterPercent = reservoirLevelPercent(reservoirWaterLevel);
     reservoirPercentLCD(reservoirWaterPercent);
     reservoirStatusLCD(reservoirWaterPercent);
+    buzzerControl(reservoirWaterPercent);
 
     delay(2000);
 }
@@ -219,4 +222,16 @@ void pumpWaterControl(int moisturePercent)
     {
         digitalWrite(relayPin, LOW);
     }
+}
+void buzzerControl(int reservoirLevelPercent)
+{
+    if (reservoirLevelPercent <= 30)
+    {
+        digitalWrite(buzzerPin, HIGH);
+    }
+    else if (reservoirLevelPercent > 30 & reservoirLevelPercent < 80)
+    {
+        digitalWrite(buzzerPin, LOW);
+    }
+    delay(1000);
 }
