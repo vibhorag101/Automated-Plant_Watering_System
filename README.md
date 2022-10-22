@@ -1,7 +1,7 @@
 # An Automated Plant Watering System
 An Automated Plant Watering System using Arduino Uno R3, Ultrasonic and
 Soil Humidity Sensor.It turns on the water pump automatically once the soil humidity
-dips below a certain threshold. It also provides the userinformation like soil humidity
+dips below a certain threshold. It also provides the users information like soil humidity
 and bucket water level on a LCD.
 
 ## Hardware Needed 🛠️
